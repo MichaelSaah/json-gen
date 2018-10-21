@@ -13,11 +13,25 @@ class lastName(sampler):
 class personAge(sampler):
     values = list(range(18, 80))
 
+class eMail_domain(sampler):
+    values = ['hotmail.com', 'gmail.com', 'yahoo.com', 'comcast.net', 'verizon.net']
+
+class eMail_number(sampler):
+    values = list(range(100,10000))
+
+class eMail:
+    names = firstName()
+    domains = eMail_domain()
+    numbers = email_number()
+    def __call__(self):
+        return self.names() + self.numbers() + '@' + self.domains()
+
 class database:
     _db = {
         'firstName' : firstName(),
         'lastName' : lastName(),
-        'personAge' : personAge()
+        'personAge' : personAge(),
+        'eMail' : eMail()
     }
     def __call__(self, name_str):
         if name_str in self._db:
