@@ -6,11 +6,10 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def handler():
-    data_in = request.data
-    data_in = data_in.decode('utf8')
-    model, n = process_json(data_in)
-    data_out = json.dumps(build_data_out(model, n))
-    return data_out
+    model, n = process_json(request.data)
+    data_out = build_data_out(model, n)
+    data_out_as_json = json.dumps(data_out)
+    return data_out_as_json
 
 @app.errorhandler(405)
 def bad_method(error):

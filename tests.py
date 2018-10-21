@@ -56,7 +56,7 @@ def test_process_json():
     "n" : 10
     }
     """
-    model, n = process_json(test_json)
+    model, n = process_json(test_json.encode('utf-8'))
 
     correct_model = {"name" : {"first": "firstName", "last": "lastName"}}
     correct_n = 10
@@ -73,7 +73,7 @@ def test_process_json():
     """
     failed = False
     try:
-        _, _ = process_json(test_json)
+        _, _ = process_json(test_json.encode('utf-8'))
     except Exception:
         failed = True
     assert failed
@@ -86,7 +86,7 @@ def test_process_json():
     """
     failed = False
     try:
-        _, _ = process_json(test_json)
+        _, _ = process_json(test_json.encode('utf-8'))
     except Exception:
         failed = True
     assert failed
@@ -100,7 +100,7 @@ def test_process_json():
     """
     failed = False
     try:
-        _, _ = process_json(test_json)
+        _, _ = process_json(test_json.encode('utf-8'))
     except Exception:
         failed = True
     assert failed
@@ -112,9 +112,10 @@ def test_process_json():
     "n" : -10
     }
     """
+
     failed = False
     try:
-        _, _ = process_json(test_json)
+        _, _ = process_json(test_json.encode('utf-8'))
     except Exception:
         failed = True
     assert failed
@@ -125,9 +126,10 @@ def test_process_json():
     "n" : 10
     }
     """
+
     failed = False
     try:
-        _, _ = process_json(test_json)
+        _, _ = process_json(test_json.encode('utf-8'))
     except Exception:
         failed = True
     assert failed

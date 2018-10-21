@@ -5,6 +5,7 @@ from .database import database
 
 db = database()
 
+
 def replace_values(d):
     """
     Takes an object composed of elements of {dict, list, str} and recursively traverses
@@ -25,7 +26,7 @@ def replace_values(d):
         return None
 
 
-def process_json(json_str):
+def process_json(raw):
     """
     Returns the tuple (model, n), where model is the
     data template dict and n is the number of copies requested
@@ -35,7 +36,7 @@ def process_json(json_str):
         model not present
     """
 
-    data = json.loads(json_str)
+    data = json.loads(raw.decode('utf-8'))
 
     if "n" in data:
         n = data["n"]
