@@ -1,6 +1,8 @@
 from json_gen.gen import replace_values, process_json
 from json_gen.database import database
 
+db = database()
+
 def test_replace_values():
     # case: general
     test_dict = {
@@ -11,11 +13,11 @@ def test_replace_values():
 
     test_dict = replace_values(test_dict)
     print(test_dict)
-    assert test_dict["name"]["first"] in database["firstName"]
-    assert test_dict["name"]["last"] in database["lastName"]
-    assert test_dict["age"] in database["personAge"]
-    for fname in test_dict["children"]:
-        assert fname in database["firstName"]
+    assert test_dict["name"]["first"] in db._db["firstName"].values
+    assert test_dict["name"]["last"] in db._db["lastName"].values
+    assert test_dict["age"] in db._db["personAge"].values
+    for f in test_dict["children"]:
+        assert f in db._db["firstName"].values
 
     # case: nested lists
     test_dict = {
@@ -24,8 +26,8 @@ def test_replace_values():
 
     test_dict = replace_values(test_dict)
     for f,l in test_dict["people"]:
-        assert f in database["firstName"]
-        assert l in database["lastName"]
+        assert f in db._db["firstName"].values
+        assert l in db._db["lastName"].values
 
     # case: non-(string,list,dict) values
     test_dict = {
@@ -34,6 +36,17 @@ def test_replace_values():
     test_dict = replace_values(test_dict)
     for _, v in test_dict.items():
         assert v is None
+
+    # case: list
+    test_list = ["firstName", "lastName"]
+    test_list = replace_values(test_list)
+    assert test_list[0] in db._db["firstName"].values
+    assert test_list[1] in db._db["lastName"].values
+
+    # case: naked value
+    test_val = "firstName"
+    test_val = replace_values(test_val)
+    assert test_val in db._db["firstName"].values
 
 def test_process_json():
     # case: working
