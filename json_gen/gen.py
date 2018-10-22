@@ -38,7 +38,7 @@ def process_json(raw):
     if "n" in data:
         n = data["n"]
     else:
-        raise KeyError("No value found for n")
+        raise KeyError("n")
 
     if not isinstance(n, int) or n < 1:
         raise ValueError("n must be a positive integer")
@@ -46,7 +46,7 @@ def process_json(raw):
     if "model" in data:
         model = data["model"]
     else:
-        raise KeyError("No value found for model")
+        raise KeyError("model")
 
     return model, n
 
