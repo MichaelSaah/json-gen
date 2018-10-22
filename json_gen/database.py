@@ -22,7 +22,7 @@ class eMail_number(sampler):
 class eMail:
     names = firstName()
     domains = eMail_domain()
-    numbers = email_number()
+    numbers = eMail_number()
     def __call__(self):
         return self.names() + self.numbers() + '@' + self.domains()
 
