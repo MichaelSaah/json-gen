@@ -3,6 +3,29 @@ from json_gen.database import database
 
 db = database()
 
+
+def test_database():
+    # case: firstName
+    fn = db('firstName')
+    assert fn in db._db['firstName'].values
+
+    # case: lastName
+    ln = db('lastName')
+    assert ln in db._db['lastName'].values
+
+    # case: eMail
+    em = db('eMail')
+    usr, dom = em.split('@')
+    assert usr.isalnum()
+    subd, tld = dom.split('.')
+    assert subd
+    assert tld
+
+    # case: age
+    age = db('personAge')
+    assert age in db._db['personAge'].values
+
+
 def test_replace_values():
     # case: general
     test_dict = {
@@ -12,7 +35,6 @@ def test_replace_values():
     }
 
     test_dict = replace_values(test_dict)
-    print(test_dict)
     assert test_dict["name"]["first"] in db._db["firstName"].values
     assert test_dict["name"]["last"] in db._db["lastName"].values
     assert test_dict["age"] in db._db["personAge"].values
@@ -47,6 +69,7 @@ def test_replace_values():
     test_val = "firstName"
     test_val = replace_values(test_val)
     assert test_val in db._db["firstName"].values
+
 
 def test_process_json():
     # case: working
@@ -137,3 +160,5 @@ def test_process_json():
 
 if __name__ == "__main__":
     test_replace_values()
+    test_database()
+    test_process_json()

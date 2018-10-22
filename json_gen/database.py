@@ -17,7 +17,7 @@ class eMail_domain(sampler):
     values = ['hotmail.com', 'gmail.com', 'yahoo.com', 'comcast.net', 'verizon.net']
 
 class eMail_number(sampler):
-    values = list(range(100,10000))
+    values = list(map(lambda x: str(x), range(100,10000)))
 
 class eMail:
     names = firstName()
