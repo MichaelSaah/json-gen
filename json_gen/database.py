@@ -37,4 +37,4 @@ class database:
         if name_str in self._db:
             return self._db[name_str]()
         else:
-            return None
+            return name_str

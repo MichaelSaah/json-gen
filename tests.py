@@ -5,6 +5,9 @@ db = database()
 
 
 def test_database():
+    # case: not found:
+    nf = db('not found')
+    assert nf == 'not found'
     # case: firstName
     fn = db('firstName')
     assert fn in db._db['firstName'].values
@@ -56,8 +59,10 @@ def test_replace_values():
         "int" : 3, "float" : 2.07, "bool" : True, "null" : None
     }
     test_dict = replace_values(test_dict)
-    for _, v in test_dict.items():
-        assert v is None
+    assert test_dict['int'] == 3
+    assert test_dict['float'] == 2.07
+    assert test_dict['bool'] == True
+    assert test_dict['null'] == None
 
     # case: list
     test_list = ["firstName", "lastName"]

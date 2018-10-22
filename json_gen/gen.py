@@ -20,7 +20,7 @@ def replace_values(d):
     elif isinstance(d, str):
         return db(d)
     else:
-        return None
+        return d
 
 
 def process_json(raw):
