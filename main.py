@@ -1,5 +1,5 @@
 from json_gen.gen import build_data_out, process_json
-from flask import Flask, request, Response, abort
+from flask import Flask, request, Response
 import json
 
 app = Flask(__name__)
@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def handler():
+    # need to check mimetype
     try:
         model, n = process_json(request.data)
     except json.JSONDecodeError as e:
