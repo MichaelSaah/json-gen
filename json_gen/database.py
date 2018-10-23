@@ -2,11 +2,23 @@ import random
 import string
 
 
+# building blocks
+
 class sampler:
     def __call__(self):
         return random.sample(self.values, 1)[0]
     def contains(self, x):
         return x in self.values
+
+class integer_between:
+    def __call__(self, l, u):
+        return random.sample(range(l, u+1), 1)[0]
+
+
+# tester
+
+class _tester(sampler):
+    values = ['hello', 'world']
 
 
 # names
@@ -81,24 +93,32 @@ class personSex(sampler):
 # phone numbers
 
 class localNumber:
+    l = 1000000000
+    u = 9999999999
+    ib = integer_between()
     def __call__(self):
-        num = random.sample(range(1000000000, 9999999999), 1)[0]
-        return str(num)
+        return str(self.ib(self.l, self.u))
 
-class internationalCode(sampler):
+class internationalCode:
+    l = 1
+    u = 999
+    ib = integer_between()
     def __call__(self):
-        num = random.sample(range(1,999), 1)[0]
-        return '+' + str(num)
+        return '+' + str(self.ib(self.l, self.u))
 
 class areaCode:
+    l = 100
+    u = 999
+    ib = integer_between()
     def __call__(self):
-        num = random.sample(range(100, 999), 1)[0]
-        return str(num)
+        return str(self.ib(self.l, self.u))
 
 class phoneExtension:
+    l = 10
+    u = 9999
+    ib = integer_between()
     def __call__(self):
-        num = random.sample(range(10, 9999), 1)[0]
-        return 'x' + str(num)
+        return 'x' + str(self.ib(self.l, self.u))
 
 class internationalNumber:
     local = localNumber()
@@ -125,6 +145,9 @@ class eMail:
 
 class database:
     _db = {
+        # tester
+        '_tester' : _tester(),
+
         # names
         'firstName' : firstName(), # random gender
         'lastName' : lastName(),
