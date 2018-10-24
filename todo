@@ -1,0 +1,30 @@
+generator tags:
+addresses
+lat/long
+-middle names/initials
+-name prefixes
+-name suffixes
+-phone nums (extentions, country codes)
+numbers (general)
+date/time
+timezones
+random strings
+domains/urls
+Ip addresses (4/6)
+colors
+currencies
+bank stuff (CC, routing, acct #)
+hashes
+person stuff
+dimensions
+company
+units of measure
+business
+arrays of elements
+time series data (stocks)
+weather data
+
+features:
+request caching
+saved schemas
+rest features? (map url paths to saved schemas)

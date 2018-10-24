@@ -1,5 +1,5 @@
 from json_gen.gen import replace_values, process_json
-from json_gen.database import database
+from json_gen.database import database, integer_between
 
 db = database()
 
@@ -8,6 +8,10 @@ def test_generators():
     # case: general sampler test
     t = db('_tester')
     assert t in db._db['_tester'].values
+
+    # case: integer_between
+    ib = integer_between()
+    assert 1 <= ib(1,10) <= 10
 
     # case: not found:
     nf = db('not found, leave me be')
