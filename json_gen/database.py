@@ -1,5 +1,5 @@
-import random
-import string
+import random, string, time
+from datetime import datetime
 
 
 # building blocks
@@ -141,6 +141,24 @@ class eMail:
     def __call__(self):
         return self.names() + self.numbers() + '@' + self.domains()
 
+
+# date/time
+
+class timeZone(sampler):
+    values = "['UTC−12:00', 'UTC−11:00', 'UTC−10:00', 'UTC−09:30', 'UTC−09:00', 'UTC−08:00', 'UTC−07:00', 'UTC−06:00', 'UTC−05:00', 'UTC−04:00', 'UTC−03:30', 'UTC−03:00', 'UTC−02:00', 'UTC−01:00', 'UTC±00:00', 'UTC+01:00', 'UTC+02:00', 'UTC+03:00', 'UTC+03:30', 'UTC+04:00', 'UTC+04:30', 'UTC+05:00', 'UTC+05:30', 'UTC+05:45', 'UTC+06:00', 'UTC+06:30', 'UTC+07:00', 'UTC+08:00', 'UTC+08:45', 'UTC+09:00', 'UTC+09:30', 'UTC+10:00', 'UTC+10:30', 'UTC+11:00', 'UTC+12:00', 'UTC+12:45', 'UTC+13:00', 'UTC+14:00']"
+
+class timeUnix:
+    def __call__(self):
+        return int(time.time())
+
+class timeNow:
+    def __call__(self, format='%H:%M:%S'):
+        return time.strftime(format)
+
+class timeRandom:
+    def __call__(self, format='%H:%M:%S'):
+        rt = random.sample(range(-1262304000, int(time.time())), 1)[0] # start time is jan 1, 1930
+        return datetime.utcfromtimestamp(rt).strftime(format)
 
 
 class database:
