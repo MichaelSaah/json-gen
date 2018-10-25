@@ -143,6 +143,11 @@ class eMail:
 
 
 # date/time
+# TODO: catch ValueError from strftime() when passing dangling '%' (possibly others)
+
+class time_formatter:
+    def __call__(self, format, ts):
+        return time.strftime(format, time.gmtime(ts))
 
 class timeZone(sampler):
     values = ['UTC−12:00', 'UTC−11:00', 'UTC−10:00', 'UTC−09:30', 'UTC−09:00', 'UTC−08:00', 'UTC−07:00', 'UTC−06:00', 'UTC−05:00', 'UTC−04:00', 'UTC−03:30', 'UTC−03:00', 'UTC−02:00', 'UTC−01:00', 'UTC±00:00', 'UTC+01:00', 'UTC+02:00', 'UTC+03:00', 'UTC+03:30', 'UTC+04:00', 'UTC+04:30', 'UTC+05:00', 'UTC+05:30', 'UTC+05:45', 'UTC+06:00', 'UTC+06:30', 'UTC+07:00', 'UTC+08:00', 'UTC+08:45', 'UTC+09:00', 'UTC+09:30', 'UTC+10:00', 'UTC+10:30', 'UTC+11:00', 'UTC+12:00', 'UTC+12:45', 'UTC+13:00', 'UTC+14:00']
@@ -152,14 +157,15 @@ class timeUnix:
         return int(time.time())
 
 class timeNow:
+    tf = time_formatter()
     def __call__(self, format='%H:%M:%S'):
-        return time.strftime(format)
+        return self.tf(format, int(time.time()))
 
 class timeRandom:
+    tf = time_formatter()
     def __call__(self, format='%H:%M:%S'):
         rt = random.sample(range(-1262304000, int(time.time())), 1)[0] # start time is jan 1, 1930
-        return datetime.utcfromtimestamp(rt).strftime(format)
-
+        return self.tf(format, rt)
 
 class database:
     _db = {
@@ -197,11 +203,32 @@ class database:
 
     def __call__(self, args_str):
         args = args_str.split('|')
-        if args[0] in self._db:
+
+        if args[0] == 'array' and len(args) >= 3:
+            args.pop(0) # throw away array keyword
+            n = args.pop(0)
+            try:
+                n = int(n)
+            except ValueError:
+                return args_str
+            if n < 0 or args[0] not in self._db:
+                return args_str
+
+            items = []
+            if len(args) == 1:
+                for _ in range(n):
+                    items.append(self._db[args[0]]())
+            else:
+                for _ in range(n):
+                    items.append(self._db[args[0]](*args[1:]))
+            return items
+
+        elif args[0] in self._db:
             if len(args) == 1:
                 return self._db[args[0]]()
             else:
                 return self._db[args[0]](*args[1:])
+
         else:
-            return args[0]
+            return args_str
 

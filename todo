@@ -6,8 +6,8 @@ lat/long
 -name suffixes
 -phone nums (extentions, country codes)
 numbers (general)
-date/time
-timezones
+-date/time
+-timezones
 random strings
 domains/urls
 Ip addresses (4/6)

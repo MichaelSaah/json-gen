@@ -17,6 +17,16 @@ def test_generators():
     nf = db('not found, leave me be')
     assert nf == 'not found, leave me be'
 
+    # case: array
+    values = db('array|5|_tester')
+    for v in values:
+        assert v in db._db['_tester'].values
+
+    # case: array with bad n
+    bad_args = ['array|2.3|_tester', 'array|-3|_tester', 'array|n|_tester']
+    for a in bad_args:
+        assert a == db(a)
+
     # case: eMail
     em = db('eMail')
     usr, dom = em.split('@')
@@ -24,6 +34,9 @@ def test_generators():
     subd, tld = dom.split('.')
     assert subd
     assert tld
+
+    # case: time_formatter
+    # TODO
 
 
 def test_replace_values():
@@ -162,5 +175,5 @@ def test_process_json():
 
 if __name__ == "__main__":
     test_replace_values()
-    test_database()
+    test_generators()
     test_process_json()
