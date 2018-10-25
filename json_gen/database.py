@@ -145,7 +145,7 @@ class eMail:
 # date/time
 
 class timeZone(sampler):
-    values = "['UTC−12:00', 'UTC−11:00', 'UTC−10:00', 'UTC−09:30', 'UTC−09:00', 'UTC−08:00', 'UTC−07:00', 'UTC−06:00', 'UTC−05:00', 'UTC−04:00', 'UTC−03:30', 'UTC−03:00', 'UTC−02:00', 'UTC−01:00', 'UTC±00:00', 'UTC+01:00', 'UTC+02:00', 'UTC+03:00', 'UTC+03:30', 'UTC+04:00', 'UTC+04:30', 'UTC+05:00', 'UTC+05:30', 'UTC+05:45', 'UTC+06:00', 'UTC+06:30', 'UTC+07:00', 'UTC+08:00', 'UTC+08:45', 'UTC+09:00', 'UTC+09:30', 'UTC+10:00', 'UTC+10:30', 'UTC+11:00', 'UTC+12:00', 'UTC+12:45', 'UTC+13:00', 'UTC+14:00']"
+    values = ['UTC−12:00', 'UTC−11:00', 'UTC−10:00', 'UTC−09:30', 'UTC−09:00', 'UTC−08:00', 'UTC−07:00', 'UTC−06:00', 'UTC−05:00', 'UTC−04:00', 'UTC−03:30', 'UTC−03:00', 'UTC−02:00', 'UTC−01:00', 'UTC±00:00', 'UTC+01:00', 'UTC+02:00', 'UTC+03:00', 'UTC+03:30', 'UTC+04:00', 'UTC+04:30', 'UTC+05:00', 'UTC+05:30', 'UTC+05:45', 'UTC+06:00', 'UTC+06:30', 'UTC+07:00', 'UTC+08:00', 'UTC+08:45', 'UTC+09:00', 'UTC+09:30', 'UTC+10:00', 'UTC+10:30', 'UTC+11:00', 'UTC+12:00', 'UTC+12:45', 'UTC+13:00', 'UTC+14:00']
 
 class timeUnix:
     def __call__(self):
@@ -186,11 +186,22 @@ class database:
         'internationalCode': internationalCode(),
         'areaCode': areaCode(),
         'phoneExtension': phoneExtension(),
-        'internationalNumber': internationalNumber()
+        'internationalNumber': internationalNumber(),
+
+        # time
+        'timeZone' : timeZone(),
+        'timeNow' : timeNow(),
+        'timeUnix' : timeUnix(),
+        'timeRandom' : timeRandom()
     }
 
-    def __call__(self, name_str):
-        if name_str in self._db:
-            return self._db[name_str]()
+    def __call__(self, args_str):
+        args = args_str.split('|')
+        if args[0] in self._db:
+            if len(args) == 1:
+                return self._db[args[0]]()
+            else:
+                return self._db[args[0]](*args[1:])
         else:
-            return name_str
+            return args[0]
+
