@@ -2,7 +2,7 @@ import random, string, time
 from datetime import datetime
 
 
-# building blocks
+# building blocks - not exposed to API
 
 class sampler:
     def __call__(self):
@@ -16,6 +16,14 @@ class integer_between:
             raise ValueError('The lower bound must be less than or equal to the upper bound')
         return random.sample(range(l, u+1), 1)[0]
 
+class float_between:
+    def __call__(self, l, u, k=None):
+        width = u - l
+        f =  random.random() * width + l
+        if k:
+            return round(f, k)
+        else:
+            return f
 
 # tester
 
@@ -175,20 +183,19 @@ class numberInt:
 #TODO: test
     ib = integer_between()
     def __call__(self, l=-2**31, u=2**31):
-        try:
-            l = int(l)
-            u = int(u)
-        except ValueError:
-            return type(self).__name__ + '|'  + str(l) + '|' + str(u)
-        try:
-            return self.ib(l, u)
-        except ValueError:
-            return type(self).__name__ + '|'  + str(l) + '|' + str(u)
+        l = int(l)
+        u = int(u)
+        return self.ib(l, u)
 
 class numberFloat:
-    def __call__(self, l, u, k):
-        pass
-
+#TODO: test
+    fb = float_between()
+    def __call__(self, l=-2**31, u=2**31, k=None):
+        l = float(l)
+        u = float(u)
+        if k:
+            k = int(k)
+        return self.fb(l, u, k)
 
 
 class database:
@@ -239,20 +246,26 @@ class database:
                 return args_str
 
             items = []
-            if len(args) == 1:
+            
+            try:
                 for _ in range(n):
-                    items.append(self._db[args[0]]())
-            else:
-                for _ in range(n):
-                    items.append(self._db[args[0]](*args[1:]))
+                    if len(args) == 1:
+                        items.append(self._db[args[0]]())
+                    else:
+                        items.append(self._db[args[0]](*args[1:]))
+            except ValueError:
+                return args_str
+                    
             return items
 
         elif args[0] in self._db:
-            if len(args) == 1:
-                return self._db[args[0]]()
-            else:
-                return self._db[args[0]](*args[1:])
-
+            try:
+                if len(args) == 1:
+                    return self._db[args[0]]()
+                else:
+                    return self._db[args[0]](*args[1:])
+            except ValueError:
+                return args_str
         else:
             return args_str
 
