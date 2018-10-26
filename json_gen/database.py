@@ -12,6 +12,8 @@ class sampler:
 
 class integer_between:
     def __call__(self, l, u):
+        if l > u:
+            raise ValueError('The lower bound must be less than or equal to the upper bound')
         return random.sample(range(l, u+1), 1)[0]
 
 
@@ -143,9 +145,8 @@ class eMail:
 
 
 # date/time
-# TODO: catch ValueError from strftime() when passing dangling '%' (possibly others)
 
-class time_formatter:
+class time_formatter: # TODO: check source for possible exceptions
     def __call__(self, format, ts):
         return time.strftime(format, time.gmtime(ts))
 
@@ -166,6 +167,29 @@ class timeRandom:
     def __call__(self, format='%H:%M:%S'):
         rt = random.sample(range(-1262304000, int(time.time())), 1)[0] # start time is jan 1, 1930
         return self.tf(format, rt)
+
+
+# numbers
+
+class numberInt:
+#TODO: test
+    ib = integer_between()
+    def __call__(self, l=-2**31, u=2**31):
+        try:
+            l = int(l)
+            u = int(u)
+        except ValueError:
+            return type(self).__name__ + '|'  + str(l) + '|' + str(u)
+        try:
+            return self.ib(l, u)
+        except ValueError:
+            return type(self).__name__ + '|'  + str(l) + '|' + str(u)
+
+class numberFloat:
+    def __call__(self, l, u, k):
+        pass
+
+
 
 class database:
     _db = {
