@@ -11,13 +11,15 @@ class sampler:
         return x in self.values
 
 class integer_between:
-    def __call__(self, l, u):
+    @staticmethod
+    def __call__(l, u):
         if l > u:
             raise ValueError('The lower bound must be less than or equal to the upper bound')
         return random.sample(range(l, u+1), 1)[0]
 
 class float_between:
-    def __call__(self, l, u, k=None):
+    @staticmethod
+    def __call__(l, u, k=None):
         width = u - l
         f =  random.random() * width + l
         if k:
