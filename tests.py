@@ -38,6 +38,16 @@ def test_generators():
     # case: time_formatter
     # TODO
 
+    # case: numberInt
+    nums = db('array|100|numberInt|-100|100')
+    for n in nums:
+        assert -100 <= n <= 100
+
+    # case numberFloat
+    nums = db('array|100|numberFloat|-100|100|3')
+    for n in nums:
+        assert -100 <= n <= 100
+        # TODO assert 3 decimal places
 
 def test_replace_values():
     # case: general

@@ -229,7 +229,11 @@ class database:
         'timeZone' : timeZone(),
         'timeNow' : timeNow(),
         'timeUnix' : timeUnix(),
-        'timeRandom' : timeRandom()
+        'timeRandom' : timeRandom(),
+
+        # numbers
+        'numberInt' : numberInt(),
+        'numberFloat' : numberFloat(),
     }
 
     def __call__(self, args_str):
