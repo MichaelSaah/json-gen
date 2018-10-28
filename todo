@@ -8,7 +8,8 @@ lat/long
 numbers (general)
 -date/time
 -timezones
-random strings
+-random strings
+    could add more than just alphanumeric
 domains/urls
 Ip addresses (4/6)
 colors
@@ -23,6 +24,7 @@ business
 -arrays of elements
 time series data (stocks)
 weather data
+lorem ipsum
 
 features:
 request caching
