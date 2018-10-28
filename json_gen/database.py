@@ -27,6 +27,9 @@ class float_between:
         else:
             return f
 
+class random_char(sampler):
+    values = string.ascii_letters + string.digits
+
 # tester
 
 class _tester(sampler):
@@ -182,7 +185,6 @@ class timeRandom:
 # numbers
 
 class numberInt:
-#TODO: test
     ib = integer_between()
     def __call__(self, l=-2**31, u=2**31):
         l = int(l)
@@ -190,7 +192,8 @@ class numberInt:
         return self.ib(l, u)
 
 class numberFloat:
-#TODO: test
+# Note: floats are returned as floats, so they may have less than k digits after the decimal,
+# for instance, 3.240 will be returned as 3.24. Document this.
     fb = float_between()
     def __call__(self, l=-2**31, u=2**31, k=None):
         l = float(l)
@@ -198,6 +201,22 @@ class numberFloat:
         if k:
             k = int(k)
         return self.fb(l, u, k)
+
+
+# random strings
+
+class randomString:
+    rc = random_char()
+    ib = integer_between()
+    def __call__(self, n=None):
+        if n is None:
+            n = self.ib(10,100)
+        else:
+            n = int(n)
+        rs = ''
+        for _ in range(n):
+            rs += self.rc()
+        return rs        
 
 
 class database:
@@ -236,6 +255,9 @@ class database:
         # numbers
         'numberInt' : numberInt(),
         'numberFloat' : numberFloat(),
+
+        # random strings
+        'randomString' : randomString(),
     }
 
     def __call__(self, args_str):

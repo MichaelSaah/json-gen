@@ -43,11 +43,15 @@ def test_generators():
     for n in nums:
         assert -100 <= n <= 100
 
-    # case numberFloat
+    # case: numberFloat
     nums = db('array|100|numberFloat|-100|100|3')
     for n in nums:
         assert -100 <= n <= 100
-        # TODO assert 3 decimal places
+        assert len(str(n).split('.')[1]) <= 3
+
+    # case: randomString
+    assert 10 <= len(db('randomString')) <= 100
+    assert len(db('randomString|10')) == 10
 
 def test_replace_values():
     # case: general
