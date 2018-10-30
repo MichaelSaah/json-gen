@@ -1,6 +1,6 @@
-from jsongen.processors import replace_values, process_json
-from jsongen.generators import Generate
-from jsongen.utilities import WeightedSampler
+from .processors import replace_values, process_json
+from .generators import Generate
+from .utilities import WeightedSampler
 import string
 
 db = Generate()
