@@ -1,4 +1,4 @@
-from .builders import Sampler, WeightedSampler, IntegerBetween, FloatBetween, RandomChar
+from .utilities import Sampler, WeightedSampler, IntegerBetween, FloatBetween, RandomChar
 import string, random
 
 # tester
@@ -231,7 +231,7 @@ class fullAddress:
     def __call__(self):
         return '{0} {1} {2}, {3} {4}'.format(self.snum(), self.sname(), self.cname(), self.scode(), self.zc())
 
-class database:
+class Generate:
     _db = {
         # tester
         '_tester' : _tester(),

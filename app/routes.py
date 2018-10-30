@@ -1,4 +1,4 @@
-from jsongen.gen import build_data_out, process_json
+from jsongen.processors import build_data_out, process_json
 from flask import Flask, request, Response
 import json
 

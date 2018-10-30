@@ -1,8 +1,9 @@
-from jsongen.gen import replace_values, process_json
-from jsongen.database import database
-from jsongen.builders import WeightedSampler
+from jsongen.processors import replace_values, process_json
+from jsongen.generators import Generate
+from jsongen.utilities import WeightedSampler
 import string
-db = database()
+
+db = Generate()
 
 
 def test_generators():

@@ -1,7 +1,7 @@
 import random, copy, json
-from .database import database
+from .generators import Generate
 
-db = database()
+generate = Generate()
 
 
 def replace_values(d):
@@ -16,7 +16,7 @@ def replace_values(d):
     elif isinstance(d, dict):
         return {k: replace_values(v) for k,v in d.items()}
     elif isinstance(d, str):
-        return db(d)
+        return generate(d)
     else:
         return d
 
