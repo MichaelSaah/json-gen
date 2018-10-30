@@ -58,6 +58,12 @@ def test_generators():
     for c in db('randomString'):
         assert c in chars
 
+    # case: zipCode
+    for _ in range(1000):
+        zc = db('zipCode')
+        assert 0 <= int(zc) <= 99999
+        assert len(zc) == 5
+
 def test_replace_values():
     # case: general
     test_dict = {

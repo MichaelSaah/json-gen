@@ -202,6 +202,22 @@ class streetName:
     def __call__(self):
         return self.names() + ' ' + self.types()
 
+class cityName(Sampler):
+    values = ['Franklin', 'Clinton', 'Madison', 'Arlington', 'Chester', 'Salem', 'Fairfield', 'Greenville', 'Kingston', 'Marion', 'Riverside', 'Springfield', 'Lebanon', 'Bristol', 'Fairview', 'Jackson', 'Lexington']
+
+class stateCode(Sampler):
+    values = ['AK', 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
+
+class zipCode:
+    ib = IntegerBetween()
+    def __call__(self):
+        num = self.ib(0, 99999)
+        zc = str(num)
+        while len(zc) < 5:
+            zc = '0' + zc
+        return zc           
+            
+
 class database:
     _db = {
         # tester
@@ -241,6 +257,12 @@ class database:
 
         # random strings
         'randomString' : randomString(),
+
+        # addresses
+        'streetName' : streetName(),
+        'cityName' : cityName(),
+        'stateCode' : stateCode(),
+        'zipCode' : zipCode(),
     }
 
     def __call__(self, args_str):
