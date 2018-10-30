@@ -1,16 +1,18 @@
 from json_gen.gen import replace_values, process_json
-from json_gen.database import database, integer_between
+from json_gen.database import database
+from json_gen.builders import IntegerBetween
 
 db = database()
 
 
 def test_generators():
+#TODO: test other builders
     # case: general sampler test
     t = db('_tester')
     assert t in db._db['_tester'].values
 
     # case: integer_between
-    ib = integer_between()
+    ib = IntegerBetween()
     assert 1 <= ib(1,10) <= 10
 
     # case: not found:
