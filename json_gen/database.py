@@ -1,4 +1,4 @@
-from .builders import Sampler, IntegerBetween, FloatBetween, RandomChar
+from .builders import Sampler, WeightedSampler, IntegerBetween, FloatBetween, RandomChar
 import string, random
 
 # tester
@@ -194,9 +194,9 @@ class randomString:
 class streetName:
     names = Sampler(['Magnolia', 'Cherry', 'Chestnut', 'Jackson', 'Thomas', 'Montgomery', 'Pennsylvania', 'Washington', 'Willow', 'Beech', 'South', 'North', 'Sherman', 
 'Oregon', 'Ash', 'Spruce', 'Pine', 'Market', 'Main'])
-    types = Sampler(['St.', 'Ave.', 'Dr.', 'Rd.', 'Blvd.'])
+    types = WeightedSampler(['St.', 'Ave.', 'Dr.', 'Rd.', 'Blvd.'],
+                            [0.7, 0.05, 0.05, 0.15, 0.05])
     def __call__(self):
-        #print(self.names(), self.types())
         return self.names() + ' ' + self.types()
 
 class database:

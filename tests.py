@@ -1,19 +1,19 @@
 from json_gen.gen import replace_values, process_json
 from json_gen.database import database
-from json_gen.builders import IntegerBetween
-
+from json_gen.builders import WeightedSampler
+import string
 db = database()
 
 
 def test_generators():
-#TODO: test other builders
     # case: general sampler test
     t = db('_tester')
     assert t in db._db['_tester'].values
 
-    # case: integer_between
-    ib = IntegerBetween()
-    assert 1 <= ib(1,10) <= 10
+    # case: WeightedSampler
+    wb = WeightedSampler(['a', 'b', 'c'], [0.4, 0.6, 0])
+    for _ in range(100):
+        assert wb() in ['a', 'b']
 
     # case: not found:
     nf = db('not found, leave me be')
@@ -40,20 +40,23 @@ def test_generators():
     # case: time_formatter
     # TODO
 
-    # case: numberInt
+    # case: numberInt - this case covers IntegerBetween
     nums = db('array|100|numberInt|-100|100')
     for n in nums:
         assert -100 <= n <= 100
 
-    # case: numberFloat
+    # case: numberFloat - this case covers FloatBetween
     nums = db('array|100|numberFloat|-100|100|3')
     for n in nums:
         assert -100 <= n <= 100
         assert len(str(n).split('.')[1]) <= 3
 
-    # case: randomString
+    # case: randomString - this case covers RandomChar
     assert 10 <= len(db('randomString')) <= 100
     assert len(db('randomString|10')) == 10
+    chars = string.ascii_letters + string.digits
+    for c in db('randomString'):
+        assert c in chars
 
 def test_replace_values():
     # case: general
