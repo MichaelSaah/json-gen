@@ -1,9 +1,8 @@
-from json_gen.gen import build_data_out, process_json
+from jsongen.gen import build_data_out, process_json
 from flask import Flask, request, Response
 import json
 
-app = Flask(__name__)
-
+from app import app
 
 @app.route('/', methods=['POST'])
 def handler():
@@ -38,5 +37,3 @@ def bad_request(e):
     err = json.dumps({'error' : msg})
     return Response(err, status=400, mimetype='application/json')
 
-if __name__=="__main__":
-    app.run(host='127.0.0.1')

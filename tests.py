@@ -1,6 +1,6 @@
-from json_gen.gen import replace_values, process_json
-from json_gen.database import database
-from json_gen.builders import WeightedSampler
+from jsongen.gen import replace_values, process_json
+from jsongen.database import database
+from jsongen.builders import WeightedSampler
 import string
 db = database()
 

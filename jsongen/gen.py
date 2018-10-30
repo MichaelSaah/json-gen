@@ -1,6 +1,4 @@
-import random
-import copy
-import json
+import random, copy, json
 from .database import database
 
 db = database()
