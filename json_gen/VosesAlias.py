@@ -14,15 +14,25 @@ class VosesAlias:
     algorithm can handle some amount of numerical noise, so don't 
     sweat this too hard.
     """
-    def __init__(self, values, weights):
-        if len(values) != len(weights):
+    def __init__(self, values=None, weights=None):
+        # we allow weights and values to be set externally by inheriting class
+        # check to make sure either passed or set prior
+        if (not values and not hasattr(self, 'values')) or \
+        (not weights and not hasattr(self, 'weights')):
+            raise ValueError('Values and weights must be passed or set by inheriting class')
+
+        # if passed set, else assume already set
+        if values and weights:
+            self.values = values
+            self.weights = weights
+
+        if len(self.values) != len(self.weights):
             raise ValueError('Values and weights lack parity. \
                 Please pass the same number of values and weights.')
 
-        self.values = values
-        self.n = len(weights)
+        self.n = len(self.weights)
 
-        scaled_weights = list(map(lambda x: x*self.n, weights))
+        scaled_weights = list(map(lambda x: x*self.n, self.weights))
         small = []
         large = []
 

@@ -30,14 +30,17 @@ class middleInit(Sampler):
 class lastName(Sampler):
     values = ['Pullin', 'Leverette', 'Carey', 'Larosa', 'Crosby', 'Freshwater', 'Bogue', 'Do', 'Strayhorn', 'Benedetto', 'Alldredge', 'Sundberg', 'Will', 'Bombardier', 'Brodt', 'Davin', 'Butter', 'Kardos', 'Barile', 'Remy', 'Brim', 'Holtsclaw', 'Delariva', 'Bissette', 'Garfinkel', 'Jerkins', 'Rosso', 'Nickel', 'Kriz', 'Vanwingerden', 'Viger', 'Geise', 'Kellough', 'Kimberling', 'Greenburg', 'Gressett', 'Wensel', 'Gurganus', 'Then', 'Scannell', 'Witherite', 'Piekarski', 'Heisey', 'Drews', 'Brocious', 'Schumaker', 'Fitton', 'Kehrer', 'Allison', 'Dorsey']
 
-class suffix(Sampler): # male only
+class suffix(WeightedSampler): # male only
     values = ['Jr.', 'Jr', 'Sr', 'Sr.', 'II', 'III', 'IV']
+    weights = [0.2, 0.2, 0.2, 0.2, 0.066666666, 0.066666666, 0.066666666]
 
-class prefixMale(Sampler):
+class prefixMale(WeightedSampler):
     values = ['Dr.', 'Mr.', 'Sir']
+    weights = [0.1, 0.85, 0.05]
 
-class prefixFemale(Sampler):
+class prefixFemale(WeightedSampler):
     values = ['Dr.', 'Mrs.', 'Ms.', 'Miss', 'Madam']
+    weights = [0.1, 0.4, 0.4, 0.05, 0.05]
 
 class prefix:
     male_pf = prefixMale()

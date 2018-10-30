@@ -12,9 +12,8 @@ class Sampler:
 
 
 class WeightedSampler(VosesAlias):
-    # essentially just renaming here for our use
     pass
-
+        
 
 class IntegerBetween:
     @staticmethod
