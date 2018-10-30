@@ -5,7 +5,7 @@ lat/long
 -name prefixes
 -name suffixes
 -phone nums (extentions, country codes)
-numbers (general)
+-numbers (general)
 -date/time
 -timezones
 -random strings
