@@ -216,7 +216,20 @@ class zipCode:
         while len(zc) < 5:
             zc = '0' + zc
         return zc           
-            
+
+class streetNum:
+    ib = IntegerBetween()
+    def __call__(self):
+        return str(self.ib(1, 9999))            
+
+class fullAddress:
+    snum = streetNum()
+    sname = streetName()
+    zc = zipCode()
+    cname = cityName()
+    scode = stateCode()
+    def __call__(self):
+        return '{0} {1} {2}, {3} {4}'.format(self.snum(), self.sname(), self.cname(), self.scode(), self.zc())
 
 class database:
     _db = {
@@ -263,6 +276,8 @@ class database:
         'cityName' : cityName(),
         'stateCode' : stateCode(),
         'zipCode' : zipCode(),
+        'streetNum' : streetNum(),
+        'fullAddress' : fullAddress(),
     }
 
     def __call__(self, args_str):

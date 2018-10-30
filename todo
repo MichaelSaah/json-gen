@@ -1,5 +1,6 @@
 generator tags:
-addresses
+-addresses
+    make zipCode take a statecode and return valid zc for state
 lat/long
 -middle names/initials
 -name prefixes
