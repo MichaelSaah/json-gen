@@ -1,5 +1,7 @@
 Currently working on:
 implement users
+    api key - 128 bit symmetric key
+    https://security.stackexchange.com/questions/18684/how-to-implement-an-api-key-mechanism#18687        
 implement usage accounting
 
 generator tags:
