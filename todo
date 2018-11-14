@@ -1,3 +1,7 @@
+Currently working on:
+implement users
+implement usage accounting
+
 generator tags:
 -addresses
     make zipCode take a statecode and return valid zc for state

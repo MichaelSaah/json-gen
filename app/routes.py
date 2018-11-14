@@ -4,10 +4,14 @@ import json
 
 from app import app
 
-@app.route('/', methods=['POST'])
+@app.route('/')
+def index():
+    return 'index'
+
+@app.route('/api/', methods=['POST'])
 def handler():
-    # need to check mimetype
-    try:
+    # TODO: check mimetype
+      try:
         model, n = process_json(request.data)
     except json.JSONDecodeError as e:
         return bad_request(e)
