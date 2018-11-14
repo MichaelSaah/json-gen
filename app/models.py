@@ -14,4 +14,5 @@ class Transaction(db.Model):
     time = db.Column(db.DateTime)
     request = db.Column(db.String(5000))
     cost = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # backref: user
