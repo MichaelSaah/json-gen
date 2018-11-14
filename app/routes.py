@@ -11,7 +11,7 @@ def index():
 @app.route('/api/', methods=['POST'])
 def handler():
     # TODO: check mimetype
-      try:
+    try:
         model, n = process_json(request.data)
     except json.JSONDecodeError as e:
         return bad_request(e)
