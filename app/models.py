@@ -5,11 +5,13 @@ class User(db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    transactions = db.relationship('Transaction', backref='user',
+                                lazy='dynamic')
     # api key
 
-class Transactions(db.Model):
-    pass
-    # date/time
-    # foreignkey user
-    # request text
-    # cost (in points)
+class Transaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime)
+    request = db.Column(db.String(5000))
+    cost = db.Column(db.Integer)
+    # backref: user
