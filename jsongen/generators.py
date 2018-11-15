@@ -280,40 +280,54 @@ class Generate:
         'fullAddress' : fullAddress(),
     }
 
-    def __call__(self, args_str):
+
+    def parse_args(self, args_str):
+    # return is_array, n (if is_array), tuple of args
+    # if args bad, return empty dict
+        args_out = {'is_array': False}
+
         args = args_str.split('|')
 
         if args[0] == 'array' and len(args) >= 3:
+            args_out['is_array'] = True
             args.pop(0) # throw away array keyword
+            # validate n
             n = args.pop(0)
             try:
                 n = int(n)
             except ValueError:
-                return args_str
+                return {} # can't convert n
             if n < 0 or args[0] not in self._db:
-                return args_str
+                return {} # n not valid
+            args_out['n'] = n
 
-            items = []
-            
-            try:
-                for _ in range(n):
-                    if len(args) == 1:
-                        items.append(self._db[args[0]]())
-                    else:
-                        items.append(self._db[args[0]](*args[1:]))
-            except ValueError:
-                return args_str
-                    
-            return items
+        try:
+            # validate args by doing test calls
+            if len(args) == 1:
+                self._db[args[0]]()
+                args_out['args'] = []
+            else:
+                self._db[args[0]](*args[1:])
+                args_out['args'] = args[1:]
+            args_out['call'] = args[0]
+        except (ValueError, KeyError):
+            return {} # test call failed
 
-        elif args[0] in self._db:
-            try:
-                if len(args) == 1:
-                    return self._db[args[0]]()
-                else:
-                    return self._db[args[0]](*args[1:])
-            except ValueError:
-                return args_str
-        else:
+        return args_out
+    
+
+    def __call__(self, args_str):
+        args = self.parse_args(args_str)
+        if not args:
             return args_str
 
+        if args['is_array']:
+            items = []
+            for _ in range(args['n']):
+                items.append(self._db[args['call']](*args['args']))
+            return items
+        else:
+            return self._db[args['call']](*args['args'])
+
+    def cost(self, args_str):
+        pass
