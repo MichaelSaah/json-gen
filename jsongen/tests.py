@@ -1,4 +1,4 @@
-from .processors import replace_values, process_json
+from .processors import replace_values, process_json, calculate_cost
 from .generators import Generate
 from .utilities import WeightedSampler
 import string
@@ -199,7 +199,15 @@ def test_process_json():
     assert failed
 
 
+def test_calculate_cost():
+    test_dict = {"name": "_tester"}
+    assert calculate_cost(test_dict) == db._db['_tester'].cost
+
+    test_dict = {'names': 'array|10|_tester'}
+    assert calculate_cost(test_dict) == db._db['_tester'].cost * 10
+
 if __name__ == "__main__":
     test_replace_values()
     test_generators()
     test_process_json()
+    test_calculate_cost()

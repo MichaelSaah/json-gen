@@ -3,6 +3,7 @@ import random, string
 # Building blocks for generators - not exposed to API
 
 class Sampler:
+    cost = 10
     def __init__(self, values=None):
         if values:
             self.values = values
