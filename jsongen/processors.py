@@ -4,24 +4,32 @@ from .generators import Generate
 generate = Generate()
 
 
-def traverse(d, f):
+def replace_values(d):
     if isinstance(d, list):
         return list(map(replace_values, d))
     elif isinstance(d, dict):
         return {k: replace_values(v) for k,v in d.items()}
     elif isinstance(d, str):
-        return f(d)
+        return generate(d)
     else:
         return d
 
 
-def replace_values(d):
-    """
-    Takes an object composed of elements of {dict, list, str} and recursively traverses
-    it, replacing tags with values sampled from the database.
-    If values are found that either are not strings or are not valid tags, None is inserted
-    """
-    return traverse(d, generate)
+def calculate_cost(d):
+    cost = 0
+    def cc(d):
+        nonlocal cost
+        if isinstance(d, list):
+            return list(map(cc, d))
+        elif isinstance(d, dict):
+            return {k: cc(v) for k,v in d.items()}
+        elif isinstance(d, str):
+            cost += generate.cost(d)
+        else:
+            return d
+    cc(d)
+
+    return cost
 
 
 def process_json(raw):
