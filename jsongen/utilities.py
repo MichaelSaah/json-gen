@@ -88,11 +88,11 @@ class VosesAlias:
 
 
 class WeightedSampler(VosesAlias):
-    # essentially just renaming
-    pass
+    cost = 10
         
 
 class IntegerBetween:
+    cost = 10
     @staticmethod
     def __call__(l, u):
         if l > u:
@@ -101,6 +101,7 @@ class IntegerBetween:
 
 
 class FloatBetween:
+    cost = 10
     @staticmethod
     def __call__(l, u, k=None):
         width = u - l

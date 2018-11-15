@@ -6,6 +6,11 @@ import string
 db = Generate()
 
 
+def test_generator_costs():
+    for _, gen in db._db.items():
+        assert hasattr(gen, 'cost')
+
+
 def test_generators():
     # case: general sampler test
     t = db('_tester')
@@ -64,6 +69,7 @@ def test_generators():
         zc = db('zipCode')
         assert 0 <= int(zc) <= 99999
         assert len(zc) == 5
+
 
 def test_replace_values():
     # case: general
@@ -200,14 +206,10 @@ def test_process_json():
 
 
 def test_calculate_cost():
+# need to test nested cases
     test_dict = {"name": "_tester"}
     assert calculate_cost(test_dict) == db._db['_tester'].cost
 
     test_dict = {'names': 'array|10|_tester'}
     assert calculate_cost(test_dict) == db._db['_tester'].cost * 10
 
-if __name__ == "__main__":
-    test_replace_values()
-    test_generators()
-    test_process_json()
-    test_calculate_cost()
