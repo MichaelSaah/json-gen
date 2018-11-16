@@ -13,7 +13,6 @@ def index():
 @app.route('/api/', methods=['POST'])
 def api():
     # TODO: check mimetype
-    # TODO: establish who exactly can raise Key and Value errors in process_json
     try:
         data = json.loads(request.data.decode('utf-8'))
     except json.JSONDecodeError as e:
