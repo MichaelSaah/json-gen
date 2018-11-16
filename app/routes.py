@@ -1,10 +1,12 @@
-from jsongen.processors import build_data_out, calculate_cost
+from jsongen import JsonGen
 from flask import Flask, request, Response
 from app.models import User, Transaction
 from datetime import datetime
 import json
 
 from app import app, db
+
+jg = JsonGen()
 
 @app.route('/')
 def index():
@@ -36,13 +38,13 @@ def api():
     if user is None:
         return bad_request("Provided user does not exist")
 
-    cost = n * calculate_cost(model)
-    record = json.dumps({'model': model, 'n': n})
-    
-    data_out = build_data_out(model, n)
+    data_out, cost = jg.generate(model, n)    
     data_out_as_json = json.dumps(data_out)
     
-    transaction = Transaction(user=user, cost=cost, request=record, time = datetime.now())
+    transaction = Transaction(user=user, 
+                              cost=cost,
+                              request=json.dumps({'model': model, 'n': n}),
+                              time = datetime.now())
     db.session.add(transaction)
     db.session.commit()
 
