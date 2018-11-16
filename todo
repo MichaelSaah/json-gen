@@ -4,6 +4,9 @@ implement users
     https://security.stackexchange.com/questions/18684/how-to-implement-an-api-key-mechanism#18687        
 implement usage accounting
     the basics are working, have costs, transaction ledger
+testing:
+    need to implement flask testing
+    test views
 
 generator tags:
 -addresses
