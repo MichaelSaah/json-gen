@@ -1,4 +1,4 @@
-from .processors import replace_values, process_json, calculate_cost
+from .processors import replace_values, calculate_cost
 from .generators import Generate
 from .utilities import WeightedSampler
 import string
@@ -118,7 +118,7 @@ def test_replace_values():
     assert test_val in db._db["_tester"].values
 
 
-def test_process_json():
+def DEPRECATED_process_json():
     # case: working
     test_json = """
     {

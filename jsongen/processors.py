@@ -32,34 +32,6 @@ def calculate_cost(d):
     return cost
 
 
-def process_json(raw):
-    """
-    Returns the tuple (model, n), where model is the
-    data template dict and n is the number of copies requested
-    Will throw exceptions on the following conditions:
-        n not present
-        n not a positive integer
-        model not present
-    """
-
-    data = json.loads(raw.decode('utf-8'))
-
-    if "n" in data:
-        n = data["n"]
-    else:
-        raise KeyError("n")
-
-    if not isinstance(n, int) or n < 1:
-        raise ValueError("n must be a positive integer")
-
-    if "model" in data:
-        model = data["model"]
-    else:
-        raise KeyError("model")
-
-    return model, n
-
-
 def build_data_out(model, n):
     """
     Returns n copies of the model with values subsituted from the database
