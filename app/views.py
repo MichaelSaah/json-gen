@@ -9,7 +9,6 @@ from app import app, db
 jg = JsonGen()
 
 def api_view(request):
-    # TODO: check mimetype
     try:
         data = json.loads(request.data.decode('utf-8'))
     except json.JSONDecodeError as e:
