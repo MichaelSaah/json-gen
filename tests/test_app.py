@@ -1,25 +1,43 @@
-import requests, json
+import os, tempfile, pytest, json
+from app import app, db, models
+from flask_migrate import upgrade
+from flask import jsonify
 
-host = 'http://localhost:5000/api/'
+@pytest.fixture
+def client():
+    db_fd, path = tempfile.mkstemp()
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + path
+    app.config['TESTING'] = True
+    client = app.test_client()
 
-def test_api_handler():
-#TODO: reimplement process_json test in here
-    # good request
-    # todo: assert transaction processed properly
-    data = {'user': 'Mike', 'n': 1, 'model': {'name': '_tester'}}
-    r = requests.post(host, data=json.dumps(data))
-    print(r.text)
-    assert r.status_code == 200
+    with app.app_context():
+        db.init_app(app)
+        upgrade()
 
+    test_user = models.User(username='Mike')
+    db.session.add(test_user)
+    db.session.commit()
+    
+    yield client
+
+    os.close(db_fd)
+    os.unlink(path)
+
+endpoint = '/api/'
+
+def test_api_view(client):
+    test_data = {
+    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
+    "n" : 10,
+    "user" : "Mike",
+    }
+    res = client.post(endpoint, data=json.dumps(test_data))
+    assert res.status_code == 200
+    
 
 def _holder_for_json_parsing_test():
     # case: working
-    test_json = """
-    {
-    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
-    "n" : 10
-    }
-    """
+    
     model, n = process_json(test_json.encode('utf-8'))
 
     correct_model = {"name" : {"first": "firstName", "last": "lastName"}}
