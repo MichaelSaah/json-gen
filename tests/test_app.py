@@ -14,6 +14,7 @@ def client():
         db.init_app(app)
         upgrade()
 
+    # add test user to test db
     test_user = models.User(username='Mike')
     db.session.add(test_user)
     db.session.commit()
@@ -23,97 +24,61 @@ def client():
     os.close(db_fd)
     os.unlink(path)
 
-endpoint = '/api/'
+
+route = '/api/'
 
 def test_api_view(client):
+    # case: working
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "n" : 10,
     "user" : "Mike",
     }
-    res = client.post(endpoint, data=json.dumps(test_data))
+    res = client.post(route, data=json.dumps(test_data))
     assert res.status_code == 200
+
+    # case: bad json
+    res = client.post(route, data='{"Hi": "There"}}'.encode('utf-8'))
+    assert res.status_code == 400
     
-
-def _holder_for_json_parsing_test():
-    # case: working
-    
-    model, n = process_json(test_json.encode('utf-8'))
-
-    correct_model = {"name" : {"first": "firstName", "last": "lastName"}}
-    correct_n = 10
-
-    assert model == correct_model
-    assert n == correct_n
-
-    # case: catch bad json
-    test_json = """
-    {
-    "model" : {"name" : "first": "firstName", "last": "lastName"}},
-    "n" : 10
-    }
-    """
-    failed = False
-    try:
-        _, _ = process_json(test_json.encode('utf-8'))
-    except Exception:
-        failed = True
-    assert failed
-
     # case: no n
-    test_json = """
-    {
-    "model" : {"name" : {"first": "firstName", "last": "lastName"}}
-    }
-    """
-    failed = False
-    try:
-        _, _ = process_json(test_json.encode('utf-8'))
-    except Exception:
-        failed = True
-    assert failed
-
-    # case: n not an int
-    test_json = """
-    {
+    test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
-    "n" : "not an int"
+    "user" : "Mike",
     }
-    """
-    failed = False
-    try:
-        _, _ = process_json(test_json.encode('utf-8'))
-    except Exception:
-        failed = True
-    assert failed
-
-    # case: n negative
-    test_json = """
-    {
-    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
-    "n" : -10
-    }
-    """
-
-    failed = False
-    try:
-        _, _ = process_json(test_json.encode('utf-8'))
-    except Exception:
-        failed = True
-    assert failed
+    res = client.post(route, data=json.dumps(test_data))
+    assert res.status_code == 400
 
     # case: no model
-    test_json = """
-    {
-    "n" : 10
+    test_data = {
+    "n": 10,
+    "user" : "Mike",
     }
-    """
+    res = client.post(route, data=json.dumps(test_data))
+    assert res.status_code == 400
 
-    failed = False
-    try:
-        _, _ = process_json(test_json.encode('utf-8'))
-    except Exception:
-        failed = True
-    assert failed
+    # case: no user
+    test_data = {
+    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
+    "n": 10,
+    }
+    res = client.post(route, data=json.dumps(test_data))
+    assert res.status_code == 400
 
+    # case: n negative
+    test_data = {
+    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
+    "n" : -10,
+    "user" : "Mike",
+    }
+    res = client.post(route, data=json.dumps(test_data))
+    assert res.status_code == 400
 
+    # case: n cannot be converted
+    test_data = {
+    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
+    "n" : "3.14",
+    "user" : "Mike",
+    }
+    res = client.post(route, data=json.dumps(test_data))
+    assert res.status_code == 400

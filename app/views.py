@@ -25,7 +25,9 @@ def api_view(request):
         n = int(data['n'])
     except ValueError:
         return bad_request("Value given for `n` is not valid: " + str(data['n']))
-    
+    if n < 1:
+        return bad_request("Value given for `n` is less than 1")
+
     if 'user' not in data:
         return bad_request("No `user` provided in request")
     user = User.query.filter_by(username=data['user']).first()
@@ -42,7 +44,7 @@ def api_view(request):
     db.session.add(transaction)
     db.session.commit()
 
-    return data_out_as_json
+    return data_out_as_json # replace with jsonify func
 
 @app.errorhandler(405)
 def bad_method(e):
