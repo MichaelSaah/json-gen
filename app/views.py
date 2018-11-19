@@ -1,5 +1,5 @@
 from jsongen import JsonGen
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 from app.models import User, Transaction
 from datetime import datetime
 import json
@@ -35,7 +35,6 @@ def api_view(request):
         return bad_request("Provided user does not exist")
 
     data_out, cost = jg.generate(model, n)    
-    data_out_as_json = json.dumps(data_out)
     
     transaction = Transaction(user=user, 
                               cost=cost,
@@ -44,7 +43,7 @@ def api_view(request):
     db.session.add(transaction)
     db.session.commit()
 
-    return data_out_as_json # replace with jsonify func
+    return jsonify(data_out)
 
 @app.errorhandler(405)
 def bad_method(e):
