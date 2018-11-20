@@ -1,12 +1,8 @@
 Currently working on:
-implement users
-    api key - 128 bit symmetric key
+api key
     https://security.stackexchange.com/questions/18684/how-to-implement-an-api-key-mechanism#18687        
-implement usage accounting
-    the basics are working, have costs, transaction ledger
-testing:
-    need to implement flask testing
-    test views
+response caching - necessary? use cases?
+    
 
 generator tags:
 -addresses
@@ -35,6 +31,4 @@ weather data
 lorem ipsum
 
 features:
-request caching
-saved schemas
 rest features? (map url paths to saved schemas)
