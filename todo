@@ -7,6 +7,7 @@ split up generators into modules, implement automatic registration (maybe later)
 generator tags:
 -addresses
     make zipCode take a statecode and return valid zc for state
+        generating REAL VALID zc's is not trivial
 lat/long
 -middle names/initials
 -name prefixes
