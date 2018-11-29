@@ -19,20 +19,21 @@ def api_view(request):
         return bad_request("No `model` prodivded in request")
     model = data['model']
 
-    if 'n' not in data:
-        return bad_request("No `n` provided in request")
-    try:    
-        n = int(data['n'])
-    except ValueError:
-        return bad_request("Value given for `n` is not valid: " + str(data['n']))
-    if n < 1:
-        return bad_request("Value given for `n` is less than 1")
-
     if 'user' not in data:
         return bad_request("No `user` provided in request")
     user = User.query.filter_by(username=data['user']).first()
     if user is None:
         return bad_request("Provided user does not exist")
+
+    if 'n' in data:
+        try:    
+            n = int(data['n'])
+        except ValueError:
+            return bad_request("Value given for `n` is not valid: " + str(data['n']))
+        if n < 1:
+            return bad_request("Value given for `n` is less than 1")
+    else:
+        n = 1
 
     data_out, cost = jg.generate(model, n)    
     

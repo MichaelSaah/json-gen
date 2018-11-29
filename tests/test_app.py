@@ -28,10 +28,18 @@ def client():
 route = '/api/'
 
 def test_api_view(client):
-    # case: working
+    # case: working, n given
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "n" : 10,
+    "user" : "Mike",
+    }
+    res = client.post(route, data=json.dumps(test_data))
+    assert res.status_code == 200
+
+    # case: working, no n given
+    test_data = {
+    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "user" : "Mike",
     }
     res = client.post(route, data=json.dumps(test_data))
@@ -41,14 +49,6 @@ def test_api_view(client):
     res = client.post(route, data='{"Hi": "There"}}'.encode('utf-8'))
     assert res.status_code == 400
     
-    # case: no n
-    test_data = {
-    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
-    "user" : "Mike",
-    }
-    res = client.post(route, data=json.dumps(test_data))
-    assert res.status_code == 400
-
     # case: no model
     test_data = {
     "n": 10,
