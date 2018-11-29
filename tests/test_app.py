@@ -83,7 +83,17 @@ def test_main_view(client):
     res = client.post(route, data=json.dumps(test_data))
     assert res.status_code == 400
 
+    # case: bad refresh
+    test_data = {
+    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
+    "user" : "Mike",
+    "refresh" : "not a bool"
+    }
+    res = client.post(route, data=json.dumps(test_data))
+    assert res.status_code == 400
+
 def test_main_view_response_cacheing(client):
+    # case: working, False refresh
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "n" : 10,
@@ -95,3 +105,18 @@ def test_main_view_response_cacheing(client):
     assert res_1.status_code == 200
     assert res_2.status_code == 200
     assert res_1.data == res_2.data
+
+    # case: working, True refresh
+    test_data = {
+    "model" : {"name" : {"first": "firstName", "last": "lastName"}},
+    "n" : 10,
+    "user" : "Mike",
+    "refresh": True
+    }
+    res_1 = client.post(route, data=json.dumps(test_data))
+    res_2 = client.post(route, data=json.dumps(test_data))
+    assert res_1.status_code == 200
+    assert res_2.status_code == 200
+    assert res_1.data != res_2.data
+
+

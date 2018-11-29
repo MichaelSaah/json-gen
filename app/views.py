@@ -37,7 +37,8 @@ def api_view(request):
 
     if 'refresh' in data:
         refresh = data['refresh']
-        #TODO: check validity of refresh
+        if type(refresh) is not bool:
+            return bad_request("Value given for `refresh` is not valid: " + str(refresh))
     else:
         refresh = True
 
