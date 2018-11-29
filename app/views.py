@@ -35,16 +35,35 @@ def api_view(request):
     else:
         n = 1
 
-    data_out, cost = jg.generate(model, n)    
-    
-    transaction = Transaction(user=user, 
-                              cost=cost,
-                              request=json.dumps({'model': model, 'n': n}),
-                              time = datetime.now())
+    if 'refresh' in data:
+        refresh = data['refresh']
+        #TODO: check validity of refresh
+    else:
+        refresh = True
+
+    record = json.dumps({'model': model, 'n': n})
+    last_trans = Transaction.query.filter_by(request=record).first()
+
+    if refresh or last_trans is None:
+        data_out, cost = jg.generate(model, n)    
+        response = json.dumps(data_out)    
+        transaction = Transaction(user=user, 
+                                  cost=cost,
+                                  request=record,
+                                  response=response,
+                                  time=datetime.now())
+    else:
+        response = last_trans.response
+        transaction = Transaction(user=user,
+                                  cost=last_trans.cost,
+                                  request=record,
+                                  response=last_trans.response,
+                                  time=datetime.now())
+
     db.session.add(transaction)
     db.session.commit()
-
-    return jsonify(data_out)
+    
+    return response
 
 @app.errorhandler(405)
 def bad_method(e):
