@@ -2,28 +2,26 @@ from jsongen import JsonGen
 from flask import Flask, request, Response, jsonify
 from app.models import User, Transaction
 from datetime import datetime
+from app.decorators import require_key
+from app.errors import unauth, bad_request, bad_json
 import json
 
 from app import app, db
 
 jg = JsonGen()
 
-def api_view(request):
+
+@require_key
+def api_view(request, user):
     try:
         data = json.loads(request.data.decode('utf-8'))
-    except json.JSONDecodeError as e:
-        return bad_request(e)
+    except json.JSONDecodeError:
+        return bad_json()
 
-    # validate model, n, user
+    # validate fields
     if 'model' not in data:
         return bad_request("No `model` prodivded in request")
     model = data['model']
-
-    if 'user' not in data:
-        return bad_request("No `user` provided in request")
-    user = User.query.filter_by(username=data['user']).first()
-    if user is None:
-        return bad_request("Provided user does not exist")
 
     if 'n' in data:
         try:    
@@ -42,6 +40,7 @@ def api_view(request):
     else:
         refresh = True
 
+    # do transaction
     record = json.dumps({'model': model, 'n': n})
     last_trans = Transaction.query.filter_by(request=record).first()
 
@@ -66,21 +65,3 @@ def api_view(request):
     db.session.commit()
     
     return response
-
-@app.errorhandler(405)
-def bad_method(e):
-    err = json.dumps({'error' : 'bad method'})
-    return Response(err, status=405, mimetype='application/json')
-
-@app.errorhandler(400)
-def bad_request(e):
-    if isinstance(e, KeyError):
-        key = str(e).replace("'", "")
-        msg = '<' + key + "> not found"
-    elif isinstance(e, json.JSONDecodeError):
-        msg = "bad json: " + str(e)
-    else:
-        msg = str(e)
-    err = json.dumps({'error' : msg})
-    return Response(err, status=400, mimetype='application/json')
-

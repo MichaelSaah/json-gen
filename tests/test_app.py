@@ -15,7 +15,8 @@ def client():
         upgrade()
 
     # add test user to test db
-    test_user = models.User(username='Mike')
+    test_user = models.User(username='Mike',
+                            key='euSHRzqtK4EcPL1iNZ9CzA==')
     db.session.add(test_user)
     db.session.commit()
     
@@ -26,13 +27,15 @@ def client():
 
 
 route = '/api/'
+key='euSHRzqtK4EcPL1iNZ9CzA=='
+
 
 def test_main_view(client):
     # case: working, n given
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "n" : 10,
-    "user" : "Mike",
+    "key" : "euSHRzqtK4EcPL1iNZ9CzA==",
     }
     res = client.post(route, data=json.dumps(test_data))
     assert res.status_code == 200
@@ -40,7 +43,7 @@ def test_main_view(client):
     # case: working, no n given
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
-    "user" : "Mike",
+    "key" : "euSHRzqtK4EcPL1iNZ9CzA==",
     }
     res = client.post(route, data=json.dumps(test_data))
     assert res.status_code == 200
@@ -52,7 +55,7 @@ def test_main_view(client):
     # case: no model
     test_data = {
     "n": 10,
-    "user" : "Mike",
+    "key" : "euSHRzqtK4EcPL1iNZ9CzA==",
     }
     res = client.post(route, data=json.dumps(test_data))
     assert res.status_code == 400
@@ -63,13 +66,13 @@ def test_main_view(client):
     "n": 10,
     }
     res = client.post(route, data=json.dumps(test_data))
-    assert res.status_code == 400
+    assert res.status_code == 401
 
     # case: n negative
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "n" : -10,
-    "user" : "Mike",
+    "key" : "euSHRzqtK4EcPL1iNZ9CzA==",
     }
     res = client.post(route, data=json.dumps(test_data))
     assert res.status_code == 400
@@ -78,7 +81,7 @@ def test_main_view(client):
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "n" : "3.14",
-    "user" : "Mike",
+    "key" : "euSHRzqtK4EcPL1iNZ9CzA==",
     }
     res = client.post(route, data=json.dumps(test_data))
     assert res.status_code == 400
@@ -86,7 +89,7 @@ def test_main_view(client):
     # case: bad refresh
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
-    "user" : "Mike",
+    "key" : "euSHRzqtK4EcPL1iNZ9CzA==",
     "refresh" : "not a bool"
     }
     res = client.post(route, data=json.dumps(test_data))
@@ -97,7 +100,7 @@ def test_main_view_response_cacheing(client):
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "n" : 10,
-    "user" : "Mike",
+    "key" : "euSHRzqtK4EcPL1iNZ9CzA==",
     "refresh": False
     }
     res_1 = client.post(route, data=json.dumps(test_data))
@@ -110,7 +113,7 @@ def test_main_view_response_cacheing(client):
     test_data = {
     "model" : {"name" : {"first": "firstName", "last": "lastName"}},
     "n" : 10,
-    "user" : "Mike",
+    "key" : "euSHRzqtK4EcPL1iNZ9CzA==",
     "refresh": True
     }
     res_1 = client.post(route, data=json.dumps(test_data))
