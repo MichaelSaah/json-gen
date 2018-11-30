@@ -1,7 +1,8 @@
 Currently working on:
 api key
-    https://security.stackexchange.com/questions/18684/how-to-implement-an-api-key-mechanism#18687        
--implement optional response cacheing    
+    key checking implimented
+    need to write user creation/key generation view
+implement optional response cacheing    
     first draft of this is done
 split up generators into modules, implement automatic registration (maybe later)
 
