@@ -46,6 +46,7 @@ def api_view(request):
     last_trans = Transaction.query.filter_by(request=record).first()
 
     if refresh or last_trans is None:
+        # TODO deal with bad model
         data_out, cost = jg.generate(model, n)    
         response = json.dumps(data_out)    
         transaction = Transaction(user=user, 

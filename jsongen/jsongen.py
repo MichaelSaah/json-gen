@@ -14,7 +14,6 @@ class JsonGen:
             for _ in range(n):
                 data.append(self.replace_values(copy.deepcopy(d)))
                 cost += self.calculate_cost(d)
-        
         return data, cost    
 
     def replace_values(self, d):
@@ -26,7 +25,6 @@ class JsonGen:
             return self.gen(d)
         else:
             return d
-        
         
     def calculate_cost(self, d):
         cost = 0
@@ -41,5 +39,4 @@ class JsonGen:
             else:
                 return d
         cc(d)
-        
         return cost

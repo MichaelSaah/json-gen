@@ -371,7 +371,7 @@ class Generate:
     def cost(self, args_str):
         args = self.parse_args(args_str)
         if not args:
-            return None # decide how to handle bad transactions
+            return 10 #TODO decide how to handle bad transactions
         cost = self._db[args['call']].cost
         if args['is_array']:
             cost*=args['n']

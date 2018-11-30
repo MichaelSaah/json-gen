@@ -120,12 +120,18 @@ def test_jsongen_generate():
     assert test_val in db._db["_tester"].values
 
     # test cost function
-    #TODO test nested cases
+    # TODO test nested cases
+    # case: simple cost
     test_dict = {"name": "_tester"}
     _, cost = jg.generate(test_dict)
     assert cost == db._db['_tester'].cost
 
+    # case: array cost
     test_dict = {'names': 'array|10|_tester'}
     _, cost = jg.generate(test_dict)
     assert cost == db._db['_tester'].cost * 10
 
+    # case: bad args cost
+    test_dict = {'names': 'array10|_tester'}
+    _, cost = jg.generate(test_dict)
+    assert cost == 10
