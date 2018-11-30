@@ -7,7 +7,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     transactions = db.relationship('Transaction', backref='user',
                                 lazy='dynamic')
-    # api key
+    key = db.Column(db.String(24), index=True, unique=True)
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
