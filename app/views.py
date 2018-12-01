@@ -42,7 +42,7 @@ def api_view(request, user):
 
     # do transaction
     record = json.dumps({'model': model, 'n': n})
-    last_trans = Transaction.query.filter_by(request=record).first()
+    last_trans = Transaction.query.filter_by(request=record, user=user).first()
 
     if refresh or last_trans is None:
         # TODO deal with bad model
